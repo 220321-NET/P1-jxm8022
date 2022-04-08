@@ -132,7 +132,8 @@ public class MainMenu : IMenu
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Start();
                 }
-                MenuFactory.GetMenu("home").Start(customer);
+                if (customer.UserName != "")
+                    MenuFactory.GetMenu("home").Start(customer);
             }
             else
             {
@@ -173,7 +174,7 @@ public class MainMenu : IMenu
             Console.ForegroundColor = ConsoleColor.Gray;
             Start();
         }
-        if (customer != null)
+        if (customer != null && customer.UserName != "")
         {
             customer.Employee = false;
             MenuFactory.GetMenu("home").Start(customer);
