@@ -1,9 +1,16 @@
 using DataLayer;
 using BusinessLayer;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Host.UseSerilog(
+    (ctx, lc) => lc
+    .WriteTo.Console()
+    .WriteTo.File("../logs/telescopeLogs.txt", rollingInterval: RollingInterval.Day)
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
