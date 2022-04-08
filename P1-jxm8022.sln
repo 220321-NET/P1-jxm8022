@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelescopeStoreAPI", "TelescopeStoreAPI\TelescopeStoreAPI.csproj", "{B98E79E7-8C51-43DC-81BF-51896DC0CF69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{C52C33A8-CD2E-4F87-840F-7A746737A837}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{B4F6FF4D-43E9-421B-ACF5-FB371219EB01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLayer", "ModelLayer\ModelLayer.csproj", "{732BD53D-DBE3-4BFA-9235-F9BE0EED7F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{BD21AB18-95E0-4F90-8036-6402EA7D1A0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UILayer", "UILayer\UILayer.csproj", "{61DE8FF2-6D24-4F2A-BC8B-01D19927FD0D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98E79E7-8C51-43DC-81BF-51896DC0CF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98E79E7-8C51-43DC-81BF-51896DC0CF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98E79E7-8C51-43DC-81BF-51896DC0CF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98E79E7-8C51-43DC-81BF-51896DC0CF69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C52C33A8-CD2E-4F87-840F-7A746737A837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52C33A8-CD2E-4F87-840F-7A746737A837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52C33A8-CD2E-4F87-840F-7A746737A837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52C33A8-CD2E-4F87-840F-7A746737A837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4F6FF4D-43E9-421B-ACF5-FB371219EB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F6FF4D-43E9-421B-ACF5-FB371219EB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F6FF4D-43E9-421B-ACF5-FB371219EB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F6FF4D-43E9-421B-ACF5-FB371219EB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{732BD53D-DBE3-4BFA-9235-F9BE0EED7F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{732BD53D-DBE3-4BFA-9235-F9BE0EED7F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{732BD53D-DBE3-4BFA-9235-F9BE0EED7F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{732BD53D-DBE3-4BFA-9235-F9BE0EED7F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD21AB18-95E0-4F90-8036-6402EA7D1A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD21AB18-95E0-4F90-8036-6402EA7D1A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD21AB18-95E0-4F90-8036-6402EA7D1A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD21AB18-95E0-4F90-8036-6402EA7D1A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DE8FF2-6D24-4F2A-BC8B-01D19927FD0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DE8FF2-6D24-4F2A-BC8B-01D19927FD0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DE8FF2-6D24-4F2A-BC8B-01D19927FD0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DE8FF2-6D24-4F2A-BC8B-01D19927FD0D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
