@@ -1,5 +1,7 @@
 ## Ignore connection string
 **/connectionString.txt
+appsettings.json
+appsettings.Development.json
 
 ## Ignore VSCode
 .vscode
