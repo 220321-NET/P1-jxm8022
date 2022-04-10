@@ -27,5 +27,34 @@ namespace TelescopeStoreAPI.Controllers
             }
             return NoContent();
         }
+
+        [HttpPost("AddCustomer")]
+        public ActionResult Post(Customer customer)
+        {
+            if (customer.UserName.Length > 0)
+            {
+                _bl.AddCustomer(customer);
+                return Ok();
+            }
+            return NoContent();
+        }
+
+        [HttpPut("UpdateCustomer")]
+        public void Put(Customer customer)
+        {
+            _bl.UpdateCustomer(customer);
+        }
+
+        [HttpGet("GetAllCustomers/{employee}")]
+        public ActionResult<List<Customer>> Get(bool employee)
+        {
+            List<Customer>? customers = _bl.GetAllCustomers(employee);
+
+            if (customers != null)
+            {
+                return Ok(customers);
+            }
+            return NoContent();
+        }
     }
 }
