@@ -29,7 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// removed so the application can run with https and not redirect to http
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
