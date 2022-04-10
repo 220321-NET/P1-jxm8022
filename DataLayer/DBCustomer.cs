@@ -5,32 +5,35 @@ namespace DataLayer;
 
 public static class DBCustomer
 {
-    public static void AddCustomer(Customer customer, string _connectionString)
+    public static async Task AddCustomerAsync(Customer customer, string _connectionString)
     {
-        DataSet customerSet = new DataSet();
-
-        using SqlConnection connection = new SqlConnection(_connectionString);
-        using SqlCommand cmd = new SqlCommand("SELECT Username FROM Customer WHERE CustomerID = -1", connection);
-
-        SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
-
-        customerAdapter.Fill(customerSet, "CustomerTable");
-
-        DataTable? customerTable = customerSet.Tables["CustomerTable"];
-        if (customerTable != null)
+        await Task.Factory.StartNew(() =>
         {
-            DataRow newRow = customerTable.NewRow();
-            newRow["Username"] = customer.UserName;
+            DataSet customerSet = new DataSet();
 
-            customerTable.Rows.Add(newRow);
+            using SqlConnection connection = new SqlConnection(_connectionString);
+            using SqlCommand cmd = new SqlCommand("SELECT Username FROM Customer WHERE CustomerID = -1", connection);
 
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(customerAdapter);
-            SqlCommand insert = commandBuilder.GetInsertCommand();
+            SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
 
-            customerAdapter.InsertCommand = insert;
+            customerAdapter.Fill(customerSet, "CustomerTable");
 
-            customerAdapter.Update(customerTable);
-        }
+            DataTable? customerTable = customerSet.Tables["CustomerTable"];
+            if (customerTable != null)
+            {
+                DataRow newRow = customerTable.NewRow();
+                newRow["Username"] = customer.UserName;
+
+                customerTable.Rows.Add(newRow);
+
+                SqlCommandBuilder commandBuilder = new SqlCommandBuilder(customerAdapter);
+                SqlCommand insert = commandBuilder.GetInsertCommand();
+
+                customerAdapter.InsertCommand = insert;
+
+                customerAdapter.Update(customerTable);
+            }
+        });
     }
 
     public static Customer GetCustomer(string username, string _connectionString)

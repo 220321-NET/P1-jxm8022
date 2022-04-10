@@ -1,7 +1,7 @@
 ﻿namespace DataLayer;
 public interface IRepository
 {
-    void AddCustomer(Customer customer);
+    Task AddCustomerAsync(Customer customer);
     Customer GetCustomer(string username);
     List<Customer> GetAllCustomers(bool employee);
     void UpdateCustomer(Customer customer);

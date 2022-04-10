@@ -29,11 +29,11 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpPost("AddCustomer")]
-        public ActionResult Post(Customer customer)
+        public async Task<ActionResult> Post(Customer customer)
         {
             if (customer.UserName.Length > 0)
             {
-                _bl.AddCustomer(customer);
+                await _bl.AddCustomerAsync(customer);
                 return Ok();
             }
             return NoContent();
