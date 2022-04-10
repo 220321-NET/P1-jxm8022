@@ -3,13 +3,11 @@ namespace UILayer;
 
 public class MainMenu : IMenu
 {
-    private readonly IBusiness _bl;
     private readonly ILogger _logger;
     private Customer _customer = new Customer();
     private StoreFront _store = new StoreFront();
-    public MainMenu(IBusiness bl, ILogger logger)
+    public MainMenu(ILogger logger)
     {
-        _bl = bl;
         _logger = logger;
     }
     /// <summary>
@@ -121,7 +119,7 @@ public class MainMenu : IMenu
                 customer.UserName = username;
                 try
                 {
-                    _bl.AddCustomer(customer);
+                    _bl.AddCustomerAsync(customer);
                     customer = _bl.GetCustomer(username);
                 }
                 catch (SqlException ex)
