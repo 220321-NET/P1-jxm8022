@@ -3,11 +3,13 @@ namespace UILayer;
 
 public class MainMenu : IMenu
 {
+    private readonly HttpServices _http;
     private readonly ILogger _logger;
     private Customer _customer = new Customer();
     private StoreFront _store = new StoreFront();
-    public MainMenu(ILogger logger)
+    public MainMenu(HttpServices http, ILogger logger)
     {
+        _http = http;
         _logger = logger;
     }
     /// <summary>
@@ -35,7 +37,7 @@ public class MainMenu : IMenu
     /// <summary>
     /// Method to start the store application. This is the entrance to the telescope store.
     /// </summary>
-    public void Start()
+    public async void Start()
     {
         _logger.Information("Starting telescope store!");
         bool exit = false;
@@ -52,15 +54,15 @@ public class MainMenu : IMenu
             switch (command)
             {
                 case ('S'):
-                    SignUp();
+                    await SignUpAsync();
                     break;
 
                 case ('L'):
-                    Login();
+                    await LoginAsync();
                     break;
 
                 case ('E'):
-                    EmployeeLogin();
+                    await EmployeeLoginAsync();
                     break;
 
                 case ('Q'):
@@ -94,7 +96,7 @@ public class MainMenu : IMenu
     /// <summary>
     /// Method to handle sign up when there is a new user
     /// </summary>
-    public void SignUp()
+    public async Task SignUpAsync()
     {
         string username;
 
@@ -113,14 +115,14 @@ public class MainMenu : IMenu
         Console.WriteLine("Confirm username:");
         if (username == InputValidation.ValidString())
         {
-            if (_bl.GetCustomer(username) == null)
+            if (await _http.GetCustomerAsync(username) == null)
             {
                 Customer customer = new Customer();
                 customer.UserName = username;
                 try
                 {
-                    _bl.AddCustomerAsync(customer);
-                    customer = _bl.GetCustomer(username);
+                    await _http.AddCustomerAsync(customer);
+                    customer = await _http.GetCustomerAsync(username);
                 }
                 catch (SqlException ex)
                 {
@@ -152,7 +154,7 @@ public class MainMenu : IMenu
     /// <summary>
     /// Method to handle log in when existing user returns
     /// </summary>
-    public void Login()
+    public async Task LoginAsync()
     {
         string username;
 
@@ -162,7 +164,7 @@ public class MainMenu : IMenu
         Customer customer = new Customer();
         try
         {
-            customer = _bl.GetCustomer(username);
+            customer = await _http.GetCustomerAsync(username);
         }
         catch (SqlException ex)
         {
@@ -185,7 +187,7 @@ public class MainMenu : IMenu
         }
     }
 
-    public void EmployeeLogin()
+    public async Task EmployeeLoginAsync()
     {
         string username;
 
@@ -195,7 +197,7 @@ public class MainMenu : IMenu
         Customer customer = new Customer();
         try
         {
-            customer = _bl.GetCustomer(username);
+            customer = await _http.GetCustomerAsync(username);
         }
         catch (SqlException ex)
         {

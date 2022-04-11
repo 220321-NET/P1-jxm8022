@@ -8,18 +8,20 @@ public static class MenuFactory
 
         Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("../logs/telescopeLogs.txt").CreateLogger();
 
+        HttpServices http = new HttpServices(Log.Logger);
+
         switch (menu)
         {
             case "main":
-                return new MainMenu(Log.Logger);
+                return new MainMenu(http, Log.Logger);
             case "home":
-                return new HomeMenu(Log.Logger);
+                return new HomeMenu(http, Log.Logger);
             case "manager":
-                return new ManagerMenu(Log.Logger);
+                return new ManagerMenu(http, Log.Logger);
             case "store":
-                return new StoreMenu(Log.Logger);
+                return new StoreMenu(http, Log.Logger);
             default:
-                return new MainMenu(Log.Logger);
+                return new MainMenu(http, Log.Logger);
         }
     }
 }
