@@ -3,16 +3,16 @@ public interface IRepository
 {
     Task AddCustomerAsync(Customer customer);
     Task<Customer> GetCustomerAsync(string username);
-    List<Customer> GetAllCustomers(bool employee);
-    void UpdateCustomer(Customer customer);
-    void AddStore(StoreFront store);
-    StoreFront GetStore(string city);
-    List<StoreFront> GetStoreFronts();
-    void AddProduct(Product product);
-    void AddProduct(Product product, StoreFront store);
-    Product GetProduct(string name);
-    List<Product> GetAllProducts();
-    List<Product> GetAllProducts(StoreFront store);
-    void AddOrder(List<Product> products, StoreFront store, Customer customer);
-    List<Order> GetAllOrders(Customer customer);
+    Task<List<Customer>> GetAllCustomersAsync(bool employee);
+    Task UpdateCustomerAsync(Customer customer);
+    Task AddStoreAsync(StoreFront store);
+    Task<StoreFront> GetStoreAsync(string city);
+    Task<List<StoreFront>> GetStoreFrontsAsync();
+    Task AddProductAsync(Product product);
+    Task AddProductAsync(Product product, StoreFront store);
+    Task<Product> GetProductAsync(string name);
+    Task<List<Product>> GetAllProductsAsync();
+    Task<List<Product>> GetAllProductsAsync(StoreFront store);
+    Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer);
+    Task<List<Order>> GetAllOrdersAsync(Customer customer);
 }

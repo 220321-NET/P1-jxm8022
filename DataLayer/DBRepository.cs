@@ -21,56 +21,56 @@ public class DBRepository : IRepository
         return await DBCustomer.GetCustomerAsync(username, _connectionString);
     }
 
-    public void UpdateCustomer(Customer customer)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
-        DBCustomer.UpdateCustomer(customer, _connectionString);
+        await DBCustomer.UpdateCustomerAsync(customer, _connectionString);
     }
 
-    public List<Customer> GetAllCustomers(bool employee)
+    public async Task<List<Customer>> GetAllCustomersAsync(bool employee)
     {
-        return DBCustomer.GetAllCustomers(employee, _connectionString);
+        return await DBCustomer.GetAllCustomersAsync(employee, _connectionString);
     }
 
-    public void AddStore(StoreFront store)
+    public async Task AddStoreAsync(StoreFront store)
     {
-        DBStoreFront.AddStore(store, _connectionString);
+        await DBStoreFront.AddStoreAsync(store, _connectionString);
     }
 
-    public StoreFront GetStore(string city)
+    public async Task<StoreFront> GetStoreAsync(string city)
     {
-        return DBStoreFront.GetStore(city, _connectionString);
+        return await DBStoreFront.GetStoreAsync(city, _connectionString);
     }
 
-    public List<StoreFront> GetStoreFronts()
+    public async Task<List<StoreFront>> GetStoreFrontsAsync()
     {
-        return DBStoreFront.GetStoreFronts(_connectionString);
+        return await DBStoreFront.GetStoreFrontsAsync(_connectionString);
     }
 
-    public void AddProduct(Product product)
+    public async Task AddProductAsync(Product product)
     {
-        DBProduct.AddProduct(product, _connectionString);
+        await DBProduct.AddProductAsync(product, _connectionString);
     }
 
-    public void AddProduct(Product product, StoreFront store)
+    public async Task AddProductAsync(Product product, StoreFront store)
     {
         // get productID
         int amount = product.ProductQuantity;
-        product = GetProduct(product.ProductName);
+        product = await GetProductAsync(product.ProductName);
         if (product != null)
         {
             product.ProductQuantity = amount;
-            if (PreviousInventory(product.ProductID, store) != -1)
+            if (await PreviousInventoryAsync(product.ProductID, store) != -1)
             {
-                product.ProductQuantity += PreviousInventory(product.ProductID, store);
-                if (DBInventory.GetInventoryID(product, store, _connectionString) != -1)
+                product.ProductQuantity += await PreviousInventoryAsync(product.ProductID, store);
+                if (await DBInventory.GetInventoryIDAsync(product, store, _connectionString) != -1)
                 {
-                    store.InventoryID = DBInventory.GetInventoryID(product, store, _connectionString);
+                    store.InventoryID = await DBInventory.GetInventoryIDAsync(product, store, _connectionString);
                 }
-                UpdateInventory(product, store);
+                await UpdateInventoryAsync(product, store);
             }
             else
             {
-                AddInventory(product, store);
+                await AddInventoryAsync(product, store);
             }
         }
         else
@@ -79,50 +79,50 @@ public class DBRepository : IRepository
         }
     }
 
-    public int PreviousInventory(int id, StoreFront store)
+    public async Task<int> PreviousInventoryAsync(int id, StoreFront store)
     {
-        return DBInventory.PreviousInventory(id, store, _connectionString);
+        return await DBInventory.PreviousInventoryAsync(id, store, _connectionString);
     }
 
-    public void UpdateInventory(Product product, StoreFront store)
+    public async Task UpdateInventoryAsync(Product product, StoreFront store)
     {
-        DBInventory.UpdateInventory(product, store, _connectionString);
+        await DBInventory.UpdateInventoryAsync(product, store, _connectionString);
     }
 
-    public void AddInventory(Product product, StoreFront store)
+    public async Task AddInventoryAsync(Product product, StoreFront store)
     {
-        DBInventory.AddInventory(product, store, _connectionString);
+        await DBInventory.AddInventoryAsync(product, store, _connectionString);
     }
 
-    public Product GetProduct(string name)
+    public async Task<Product> GetProductAsync(string name)
     {
-        return DBProduct.GetProduct(name, _connectionString);
+        return await DBProduct.GetProductAsync(name, _connectionString);
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        return DBProduct.GetAllProducts(_connectionString);
+        return await DBProduct.GetAllProductsAsync(_connectionString);
     }
 
-    public List<Product> GetAllProducts(StoreFront store)
+    public async Task<List<Product>> GetAllProductsAsync(StoreFront store)
     {
-        return DBProduct.GetAllProducts(store, _connectionString);
+        return await DBProduct.GetAllProductsAsync(store, _connectionString);
     }
 
-    public void AddOrder(List<Product> products, StoreFront store, Customer customer)
+    public async Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer)
     {
-        DBOrder.AddOrder(products, store, customer, _connectionString);
+        await DBOrder.AddOrderAsync(products, store, customer, _connectionString);
     }
 
-    public List<Order> GetAllOrders(Customer customer)
+    public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
     {
-        List<int> customerOrderIds = DBOrder.GetTransactionIDs(customer, _connectionString);
+        List<int> customerOrderIds = await DBOrder.GetTransactionIDsAsync(customer, _connectionString);
         if (customerOrderIds != null)
         {
             List<Order> orders = new List<Order>();
             foreach (int id in customerOrderIds)
             {
-                Order order = DBOrder.GetOrder(id, customer, _connectionString);
+                Order order = await DBOrder.GetOrderAsync(id, customer, _connectionString);
                 if (order != null && order.Products.Count > 0)
                 {
                     orders.Add(order);

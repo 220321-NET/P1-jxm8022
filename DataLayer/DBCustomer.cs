@@ -63,66 +63,72 @@ public static class DBCustomer
         });
     }
 
-    public static void UpdateCustomer(Customer customer, string _connectionString)
+    public static async Task UpdateCustomerAsync(Customer customer, string _connectionString)
     {
-        DataSet customerSet = new DataSet();
-
-        using SqlConnection connection = new SqlConnection(_connectionString);
-        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customer WHERE CustomerID = @CustomerID", connection);
-        cmd.Parameters.AddWithValue("@CustomerID", customer.CustomerID);
-
-        SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
-
-        customerAdapter.Fill(customerSet, "CustomerTable");
-
-        DataTable? customerTable = customerSet.Tables["CustomerTable"];
-        if (customerTable != null && customerTable.Rows.Count > 0)
+        await Task.Factory.StartNew(() =>
         {
-            DataColumn[] dt = new DataColumn[1];
-            dt[0] = customerTable.Columns["CustomerID"]!;
-            customerTable.PrimaryKey = dt;
-            DataRow? customerRow = customerTable.Rows.Find(customer.CustomerID);
-            if (customerRow != null)
+            DataSet customerSet = new DataSet();
+
+            using SqlConnection connection = new SqlConnection(_connectionString);
+            using SqlCommand cmd = new SqlCommand("SELECT * FROM Customer WHERE CustomerID = @CustomerID", connection);
+            cmd.Parameters.AddWithValue("@CustomerID", customer.CustomerID);
+
+            SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
+
+            customerAdapter.Fill(customerSet, "CustomerTable");
+
+            DataTable? customerTable = customerSet.Tables["CustomerTable"];
+            if (customerTable != null && customerTable.Rows.Count > 0)
             {
-                customerRow["IsEmployee"] = !customer.Employee;
+                DataColumn[] dt = new DataColumn[1];
+                dt[0] = customerTable.Columns["CustomerID"]!;
+                customerTable.PrimaryKey = dt;
+                DataRow? customerRow = customerTable.Rows.Find(customer.CustomerID);
+                if (customerRow != null)
+                {
+                    customerRow["IsEmployee"] = !customer.Employee;
+                }
+
+                SqlCommandBuilder commandBuilder = new SqlCommandBuilder(customerAdapter);
+                SqlCommand updateCmd = commandBuilder.GetUpdateCommand();
+
+                customerAdapter.UpdateCommand = updateCmd;
+                customerAdapter.Update(customerTable);
             }
-
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(customerAdapter);
-            SqlCommand updateCmd = commandBuilder.GetUpdateCommand();
-
-            customerAdapter.UpdateCommand = updateCmd;
-            customerAdapter.Update(customerTable);
-        }
+        });
     }
 
-    public static List<Customer> GetAllCustomers(bool employee, string _connectionString)
+    public static async Task<List<Customer>> GetAllCustomersAsync(bool employee, string _connectionString)
     {
-        List<Customer> customers = new List<Customer>();
-        DataSet customerSet = new DataSet();
-
-        using SqlConnection connection = new SqlConnection(_connectionString);
-        using SqlCommand cmd = new SqlCommand("SELECT * FROM Customer WHERE IsEmployee = @employee", connection);
-        cmd.Parameters.AddWithValue("@employee", employee);
-
-        SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
-
-        customerAdapter.Fill(customerSet, "CustomerTable");
-
-        DataTable? customerTable = customerSet.Tables["CustomerTable"];
-        if (customerTable != null && customerTable.Rows.Count > 0)
+        return await Task.Factory.StartNew(() =>
         {
-            foreach (DataRow row in customerTable.Rows)
+            List<Customer> customers = new List<Customer>();
+            DataSet customerSet = new DataSet();
+
+            using SqlConnection connection = new SqlConnection(_connectionString);
+            using SqlCommand cmd = new SqlCommand("SELECT * FROM Customer WHERE IsEmployee = @employee", connection);
+            cmd.Parameters.AddWithValue("@employee", employee);
+
+            SqlDataAdapter customerAdapter = new SqlDataAdapter(cmd);
+
+            customerAdapter.Fill(customerSet, "CustomerTable");
+
+            DataTable? customerTable = customerSet.Tables["CustomerTable"];
+            if (customerTable != null && customerTable.Rows.Count > 0)
             {
-                Customer customer = new Customer
+                foreach (DataRow row in customerTable.Rows)
                 {
-                    CustomerID = (int)row["CustomerID"],
-                    UserName = (string)row["Username"],
-                    Employee = (bool)row["IsEmployee"]
-                };
-                customers.Add(customer);
+                    Customer customer = new Customer
+                    {
+                        CustomerID = (int)row["CustomerID"],
+                        UserName = (string)row["Username"],
+                        Employee = (bool)row["IsEmployee"]
+                    };
+                    customers.Add(customer);
+                }
+                return customers;
             }
-            return customers;
-        }
-        return null!;
+            return null!;
+        });
     }
 }

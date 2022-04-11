@@ -46,9 +46,9 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpGet("GetAllCustomers/{employee}")]
-        public ActionResult<List<Customer>> Get(bool employee)
+        public async Task<ActionResult<List<Customer>>> GetAsync(bool employee)
         {
-            List<Customer>? customers = _bl.GetAllCustomers(employee);
+            List<Customer>? customers = await _bl.GetAllCustomersAsync(employee);
 
             if (customers != null)
             {

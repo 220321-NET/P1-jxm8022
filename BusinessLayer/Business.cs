@@ -19,63 +19,63 @@ public class Business : IBusiness
         return await _repo.GetCustomerAsync(username);
     }
 
-    public List<Customer> GetAllCustomers(bool employee)
+    public async Task<List<Customer>> GetAllCustomersAsync(bool employee)
     {
-        return _repo.GetAllCustomers(employee);
+        return await _repo.GetAllCustomersAsync(employee);
     }
 
-    public void UpdateCustomer(Customer customer)
+    public async Task UpdateCustomerAsync(Customer customer)
     {
-        _repo.UpdateCustomer(customer);
+        await _repo.UpdateCustomerAsync(customer);
     }
 
-    public void AddStore(StoreFront store)
+    public async Task AddStoreAsync(StoreFront store)
     {
-        _repo.AddStore(store);
+        await _repo.AddStoreAsync(store);
     }
 
-    public StoreFront GetStore(string city)
+    public async Task<StoreFront> GetStoreAsync(string city)
     {
-        return _repo.GetStore(city);
+        return await _repo.GetStoreAsync(city);
     }
 
-    public List<StoreFront> GetStoreFronts()
+    public async Task<List<StoreFront>> GetStoreFrontsAsync()
     {
-        return _repo.GetStoreFronts();
+        return await _repo.GetStoreFrontsAsync();
     }
 
-    public void AddProduct(Product product)
+    public async Task AddProductAsync(Product product)
     {
-        _repo.AddProduct(product);
+        await _repo.AddProductAsync(product);
     }
 
-    public void AddProduct(Product product, StoreFront store)
+    public async Task AddProductAsync(Product product, StoreFront store)
     {
-        _repo.AddProduct(product, store);
+        await _repo.AddProductAsync(product, store);
     }
 
-    public Product GetProduct(string name)
+    public async Task<Product> GetProductAsync(string name)
     {
-        return _repo.GetProduct(name);
+        return await _repo.GetProductAsync(name);
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        return _repo.GetAllProducts();
+        return await _repo.GetAllProductsAsync();
     }
 
-    public List<Product> GetAllProducts(StoreFront store)
+    public async Task<List<Product>> GetAllProductsAsync(StoreFront store)
     {
-        return _repo.GetAllProducts(store);
+        return await _repo.GetAllProductsAsync(store);
     }
 
-    public void AddOrder(List<Product> products, StoreFront store, Customer customer)
+    public async Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer)
     {
-        _repo.AddOrder(products, store, customer);
+        await _repo.AddOrderAsync(products, store, customer);
     }
 
-    public List<Order> GetAllOrders(Customer customer)
+    public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
     {
-        return _repo.GetAllOrders(customer);
+        return await _repo.GetAllOrdersAsync(customer);
     }
 }
