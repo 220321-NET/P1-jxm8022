@@ -18,9 +18,9 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpGet("{username}")]
-        public ActionResult<Customer> Get(string username)
+        public async Task<ActionResult<Customer>> GetAsync(string username)
         {
-            Customer customer = _bl.GetCustomer(username);
+            Customer customer = await _bl.GetCustomerAsync(username);
             if (customer != null)
             {
                 return Ok(customer);

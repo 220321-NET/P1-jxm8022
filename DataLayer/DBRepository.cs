@@ -16,9 +16,9 @@ public class DBRepository : IRepository
         await DBCustomer.AddCustomerAsync(customer, _connectionString);
     }
 
-    public Customer GetCustomer(string username)
+    public async Task<Customer> GetCustomerAsync(string username)
     {
-        return DBCustomer.GetCustomer(username, _connectionString);
+        return await DBCustomer.GetCustomerAsync(username, _connectionString);
     }
 
     public void UpdateCustomer(Customer customer)

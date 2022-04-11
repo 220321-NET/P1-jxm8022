@@ -9,14 +9,14 @@ public class Business : IBusiness
         _repo = repo;
     }
 
-    public void AddCustomer(Customer customer)
+    public async Task AddCustomerAsync(Customer customer)
     {
-        _repo.AddCustomer(customer);
+        await _repo.AddCustomerAsync(customer);
     }
 
-    public Customer GetCustomer(string username)
+    public async Task<Customer> GetCustomerAsync(string username)
     {
-        return _repo.GetCustomer(username);
+        return await _repo.GetCustomerAsync(username);
     }
 
     public List<Customer> GetAllCustomers(bool employee)

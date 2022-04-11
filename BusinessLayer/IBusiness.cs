@@ -3,7 +3,7 @@ namespace BusinessLayer;
 public interface IBusiness
 {
     Task AddCustomerAsync(Customer customer);
-    Customer GetCustomer(string username);
+    Task<Customer> GetCustomerAsync(string username);
     List<Customer> GetAllCustomers(bool employee);
     void UpdateCustomer(Customer customer);
     void AddStore(StoreFront store);
