@@ -60,7 +60,18 @@ public class HttpServices
 
     public async Task UpdateCustomerAsync(Customer customer)
     {
+        string jsonString = JsonSerializer.Serialize(customer);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
+        try
+        {
+            HttpResponseMessage response = await client.PutAsync("Customer/UpdateCustomer", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
     }
 
     public async Task AddProductAsync(Product product)
