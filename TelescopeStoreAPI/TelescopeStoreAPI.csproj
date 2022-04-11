@@ -3,6 +3,7 @@
   <ItemGroup> 
     <ProjectReference Include="../ModelLayer/ModelLayer.csproj" />
     <ProjectReference Include="../DataLayer/DataLayer.csproj" />
+    <ProjectReference Include="../BusinessLayer/BusinessLayer.csproj" />
     <ProjectReference Include="../UILayer/UILayer.csproj" />
   </ItemGroup>
 
