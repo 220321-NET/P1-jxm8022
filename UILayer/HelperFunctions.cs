@@ -2,9 +2,9 @@ namespace UILayer;
 
 public static class HelperFunctions
 {
-    public static Product SelectProduct(IBusiness _bl)
+    public static async Task<Product> SelectProductAsync(HttpServices _http)
     {
-        List<Product> products = _bl.GetAllProducts();
+        List<Product> products = await _http.GetAllProductsAsync();
 
         if (products == null || products.Count == 0)
         {
@@ -37,9 +37,9 @@ public static class HelperFunctions
         }
     }
 
-    public static Product SelectProduct(IBusiness _bl, StoreFront _store)
+    public static async Task<Product> SelectProductAsync(HttpServices _http, StoreFront _store)
     {
-        List<Product> products = _bl.GetAllProducts(_store);
+        List<Product> products = await _http.GetAllProductsAsync(_store);
 
         if (products == null || products.Count == 0)
         {
@@ -72,11 +72,11 @@ public static class HelperFunctions
         }
     }
 
-    public static StoreFront SelectStore(IBusiness _bl)
+    public static async Task<StoreFront> SelectStoreAsync(HttpServices _http)
     {
         Console.WriteLine("Select a store!");
 
-        List<StoreFront> storeFronts = _bl.GetStoreFronts();
+        List<StoreFront> storeFronts = await _http.GetStoreFrontsAsync();
 
         if (storeFronts == null || storeFronts.Count == 0)
         {

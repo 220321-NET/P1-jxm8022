@@ -2,17 +2,17 @@ namespace UILayer;
 
 public class ManagerMenu : IMenu
 {
-    private readonly IBusiness _bl;
+    private readonly HttpServices _http;
     private readonly ILogger _logger;
     private Customer _customer = new Customer();
     private StoreFront _store = new StoreFront();
 
-    public ManagerMenu(IBusiness bl, ILogger logger)
+    public ManagerMenu(HttpServices http, ILogger logger)
     {
-        _bl = bl;
+        _http = http;
         _logger = logger;
     }
-    public void Start()
+    public async Task StartAsync()
     {
         bool exit = false;
 
@@ -26,19 +26,19 @@ public class ManagerMenu : IMenu
             switch (command)
             {
                 case ('A'):
-                    AddStore();
+                    await AddStoreAsync();
                     break;
 
                 case ('I'):
-                    AddInventory();
+                    await AddInventoryAsync();
                     break;
 
                 case ('E'):
-                    AddEmployee();
+                    await AddEmployeeAsync();
                     break;
 
                 case ('R'):
-                    RemoveEmployee();
+                    await RemoveEmployeeAsync();
                     break;
 
                 case ('Q'):
@@ -54,19 +54,19 @@ public class ManagerMenu : IMenu
         }
     }
 
-    public void Start(Customer customer)
+    public async Task StartAsync(Customer customer)
     {
         _customer = customer;
-        Start();
+        await StartAsync();
     }
 
-    public void Start(Customer customer, StoreFront store)
+    public async Task StartAsync(Customer customer, StoreFront store)
     {
         _customer = customer;
         _store = store;
-        Start();
+        await StartAsync();
     }
-    public void AddStore()
+    public async Task AddStoreAsync()
     {
         Console.WriteLine("Adding new store!");
         Console.WriteLine("Enter the city:");
@@ -83,14 +83,14 @@ public class ManagerMenu : IMenu
             goto EnterState;
         }
 
-        if (_bl.GetStore(city) == null)
+        if (await _http.GetStoreAsync(city) == null)
         {
             StoreFront store = new StoreFront
             {
                 City = city,
                 State = state
             };
-            _bl.AddStore(store);
+            await _http.AddStoreAsync(store);
         }
         else
         {
@@ -100,21 +100,21 @@ public class ManagerMenu : IMenu
         }
     }
 
-    public void AddInventory()
+    public async Task AddInventoryAsync()
     {
         Console.WriteLine("Adding inventory to store!");
-        _store = HelperFunctions.SelectStore(_bl);
+        _store = await HelperFunctions.SelectStoreAsync(_http);
         if (_store != null)
         {
-            MenuFactory.GetMenu("store").Start(_customer, _store);
+            await MenuFactory.GetMenu("store").StartAsync(_customer, _store);
         }
     }
 
-    public Customer SelectEmployee(bool employee)
+    public async Task<Customer> SelectEmployeeAsync(bool employee)
     {
         Console.WriteLine("Select a person!");
 
-        List<Customer> customers = _bl.GetAllCustomers(employee);
+        List<Customer> customers = await _http.GetAllCustomersAsync(employee);
 
         if (customers == null || customers.Count == 0)
         {
@@ -145,22 +145,22 @@ public class ManagerMenu : IMenu
         }
     }
 
-    public void AddEmployee()
+    public async Task AddEmployeeAsync()
     {
         bool employee = false;
         Console.WriteLine("Adding an employee!");
-        Customer customer = SelectEmployee(employee);
+        Customer customer = await SelectEmployeeAsync(employee);
         if (customer != null)
         {
-            _bl.UpdateCustomer(customer);
+            await _http.UpdateCustomerAsync(customer);
         }
     }
 
-    public void RemoveEmployee()
+    public async Task RemoveEmployeeAsync()
     {
         bool employee = true;
         Console.WriteLine("Removing an employee!");
-        Customer customer = SelectEmployee(employee);
+        Customer customer = await SelectEmployeeAsync(employee);
         if (customer != null)
         {
             if (customer.UserName == _customer.UserName)
@@ -171,7 +171,7 @@ public class ManagerMenu : IMenu
             }
             else
             {
-                _bl.UpdateCustomer(customer);
+                await _http.UpdateCustomerAsync(customer);
             }
         }
     }

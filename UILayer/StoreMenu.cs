@@ -2,49 +2,49 @@ namespace UILayer;
 
 public class StoreMenu : IMenu
 {
-    private readonly IBusiness _bl;
+    private readonly HttpServices _http;
     private readonly ILogger _logger;
     private Customer _customer = new Customer();
     private StoreFront _store = new StoreFront();
 
-    public StoreMenu(IBusiness bl, ILogger logger)
+    public StoreMenu(HttpServices http, ILogger logger)
     {
-        _bl = bl;
+        _http = http;
         _logger = logger;
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
         if (_customer.Employee)
         {
-            ManagerStoreMenu();
+            await ManagerStoreMenuAsync();
         }
         else
         {
-            CustomerStoreMenu();
+            await CustomerStoreMenuAsync();
         }
     }
 
-    public void Start(Customer customer)
+    public async Task StartAsync(Customer customer)
     {
         _customer = customer;
-        Start();
+        await StartAsync();
     }
 
-    public void Start(Customer customer, StoreFront store)
+    public async Task StartAsync(Customer customer, StoreFront store)
     {
         _customer = customer;
         _store = store;
-        Start();
+        await StartAsync();
     }
 
-    public void CustomerStoreMenu()
+    public async Task CustomerStoreMenuAsync()
     {
         bool exit = false;
 
         while (!exit)
         {
-            _store.Inventory = _bl.GetAllProducts(_store) ?? new List<Product>();
+            _store.Inventory = await _http.GetAllProductsAsync(_store) ?? new List<Product>();
             Console.WriteLine("Enter a command: (C)art -- (Q)uit");
             string input = InputValidation.ValidString();
 
@@ -53,7 +53,7 @@ public class StoreMenu : IMenu
             switch (command)
             {
                 case ('C'):
-                    Cart();
+                    await CartAsync();
                     exit = !exit;
                     break;
 
@@ -71,9 +71,9 @@ public class StoreMenu : IMenu
         }
     }
 
-    public void AddProducttoCart()
+    public async Task AddProducttoCartAsync()
     {
-        Product product = HelperFunctions.SelectProduct(_bl, _store);
+        Product product = await HelperFunctions.SelectProductAsync(_http, _store);
 
         if (product != null)
         {
@@ -96,7 +96,7 @@ public class StoreMenu : IMenu
         }
     }
 
-    public void Cart()
+    public async Task CartAsync()
     {
         decimal cartTotal = new decimal();
 
@@ -125,11 +125,11 @@ public class StoreMenu : IMenu
             switch (InputValidation.ValidString().Trim().ToUpper()[0])
             {
                 case ('A'):
-                    AddProducttoCart();
+                    await AddProducttoCartAsync();
                     break;
 
                 case ('P'):
-                    if (PurchaseCart())
+                    if (await PurchaseCartAsync())
                     {
                         _customer.Cart.Clear();
                         exit = !exit;
@@ -150,11 +150,11 @@ public class StoreMenu : IMenu
         }
     }
 
-    public bool PurchaseCart()
+    public async Task<bool> PurchaseCartAsync()
     {
         try
         {
-            _bl.AddOrder(_customer.Cart, _store, _customer);
+            await _http.AddOrderAsync(_customer.Cart, _store, _customer);
             return true;
         }
         catch (SqlException ex)
@@ -167,7 +167,7 @@ public class StoreMenu : IMenu
         }
     }
 
-    public void ManagerStoreMenu()
+    public async Task ManagerStoreMenuAsync()
     {
         bool exit = false;
 
@@ -176,7 +176,7 @@ public class StoreMenu : IMenu
             Console.WriteLine("=====================================================================");
             Console.WriteLine("=====================================================================");
             Console.WriteLine("Currently In Stock!");
-            _store.Inventory = _bl.GetAllProducts(_store);
+            _store.Inventory = await _http.GetAllProductsAsync(_store);
             if (_store.Inventory != null)
             {
                 foreach (Product product in _store.Inventory)
@@ -198,11 +198,11 @@ public class StoreMenu : IMenu
             switch (command)
             {
                 case ('A'):
-                    AddProduct();
+                    await AddProductAsync();
                     break;
 
                 case ('C'):
-                    CreateProduct();
+                    await CreateProductAsync();
                     break;
 
                 case ('Q'):
@@ -218,9 +218,9 @@ public class StoreMenu : IMenu
         }
     }
 
-    public void AddProduct()
+    public async Task AddProductAsync()
     {
-        Product product = HelperFunctions.SelectProduct(_bl);
+        Product product = await HelperFunctions.SelectProductAsync(_http);
         if (product != null)
         {
             Console.WriteLine("Amount to add:");
@@ -231,7 +231,7 @@ public class StoreMenu : IMenu
                 product.ProductQuantity = quantity;
                 try
                 {
-                    _bl.AddProduct(product, _store);
+                    await _http.AddProductAsync(product, _store);
                 }
                 catch (SqlException ex)
                 {
@@ -239,7 +239,7 @@ public class StoreMenu : IMenu
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Had trouble adding product to inventory!");
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    ManagerStoreMenu();
+                    await ManagerStoreMenuAsync();
                 }
             }
             else
@@ -251,7 +251,7 @@ public class StoreMenu : IMenu
         }
     }
 
-    public void CreateProduct()
+    public async Task CreateProductAsync()
     {
         Console.WriteLine("Creating a product!");
 
@@ -268,7 +268,7 @@ public class StoreMenu : IMenu
             product.ProductPrice = price;
             try
             {
-                _bl.AddProduct(product);
+                await _http.AddProductAsync(product);
             }
             catch (SqlException ex)
             {
@@ -276,7 +276,7 @@ public class StoreMenu : IMenu
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Had trouble creating product!");
                 Console.ForegroundColor = ConsoleColor.Gray;
-                ManagerStoreMenu();
+                await ManagerStoreMenuAsync();
             }
         }
         else

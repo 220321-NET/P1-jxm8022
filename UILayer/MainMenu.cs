@@ -37,7 +37,7 @@ public class MainMenu : IMenu
     /// <summary>
     /// Method to start the store application. This is the entrance to the telescope store.
     /// </summary>
-    public async void Start()
+    public async Task StartAsync()
     {
         _logger.Information("Starting telescope store!");
         bool exit = false;
@@ -80,17 +80,17 @@ public class MainMenu : IMenu
         Log.CloseAndFlush();
     }
 
-    public void Start(Customer customer)
+    public async Task StartAsync(Customer customer)
     {
         _customer = customer;
-        Start();
+        await StartAsync();
     }
 
-    public void Start(Customer customer, StoreFront store)
+    public async Task StartAsync(Customer customer, StoreFront store)
     {
         _customer = customer;
         _store = store;
-        Start();
+        await StartAsync();
     }
 
     /// <summary>
@@ -130,10 +130,10 @@ public class MainMenu : IMenu
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Could not connect to database!");
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    Start();
+                    await StartAsync();
                 }
                 if (customer.UserName != "")
-                    MenuFactory.GetMenu("home").Start(customer);
+                    await MenuFactory.GetMenu("home").StartAsync(customer);
             }
             else
             {
@@ -172,12 +172,12 @@ public class MainMenu : IMenu
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Could not connect to database!");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Start();
+            await StartAsync();
         }
         if (customer != null && customer.UserName != "")
         {
             customer.Employee = false;
-            MenuFactory.GetMenu("home").Start(customer);
+            await MenuFactory.GetMenu("home").StartAsync(customer);
         }
         else
         {
@@ -205,7 +205,7 @@ public class MainMenu : IMenu
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Could not connect to database!");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Start();
+            await StartAsync();
         }
         if (customer == null)
         {
@@ -215,7 +215,7 @@ public class MainMenu : IMenu
         }
         else if (customer.Employee)
         {
-            MenuFactory.GetMenu("manager").Start(customer);
+            await MenuFactory.GetMenu("manager").StartAsync(customer);
         }
         else
         {

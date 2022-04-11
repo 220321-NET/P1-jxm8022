@@ -43,4 +43,59 @@ public class HttpServices
 
         return new Customer();
     }
+
+    public async Task<List<Customer>> GetAllCustomersAsync(bool employee)
+    {
+        return new List<Customer>();
+    }
+
+    public async Task UpdateCustomerAsync(Customer customer)
+    {
+
+    }
+
+    public async Task AddProductAsync(Product product)
+    {
+
+    }
+
+    public async Task AddProductAsync(Product product, StoreFront store)
+    {
+
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        return new List<Product>();
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync(StoreFront store)
+    {
+        return new List<Product>();
+    }
+
+    public async Task<List<StoreFront>> GetStoreFrontsAsync()
+    {
+        return new List<StoreFront>();
+    }
+
+    public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
+    {
+        return new List<Order>();
+    }
+
+    public async Task<StoreFront> GetStoreAsync(string city)
+    {
+        return new StoreFront();
+    }
+
+    public async Task AddStoreAsync(StoreFront store)
+    {
+
+    }
+
+    public async Task AddOrderAsync(List<Product> cart, StoreFront store, Customer customer)
+    {
+
+    }
 }

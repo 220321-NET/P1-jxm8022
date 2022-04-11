@@ -2,7 +2,7 @@ namespace UILayer;
 
 public interface IMenu
 {
-    void Start();
-    void Start(Customer customer);
-    void Start(Customer customer, StoreFront store);
+    Task StartAsync();
+    Task StartAsync(Customer customer);
+    Task StartAsync(Customer customer, StoreFront store);
 }

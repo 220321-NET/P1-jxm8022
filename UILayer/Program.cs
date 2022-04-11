@@ -3,8 +3,8 @@ namespace UILayer;
 
 public class Program
 {
-    public static void Main(String[] args)
+    public static async void Main(String[] args)
     {
-        MenuFactory.GetMenu("main").Start();
+        await MenuFactory.GetMenu("main").StartAsync();
     }
 }

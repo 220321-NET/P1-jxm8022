@@ -2,18 +2,18 @@ namespace UILayer;
 
 public class HomeMenu : IMenu
 {
-    private readonly IBusiness _bl;
+    private readonly HttpServices _http;
     private readonly ILogger _logger;
     private Customer _customer = new Customer();
     private StoreFront _store = new StoreFront();
 
-    public HomeMenu(IBusiness bl, ILogger logger)
+    public HomeMenu(HttpServices http, ILogger logger)
     {
-        _bl = bl;
+        _http = http;
         _logger = logger;
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
         bool exit = false;
 
@@ -27,11 +27,11 @@ public class HomeMenu : IMenu
             switch (command)
             {
                 case ('O'):
-                    Order();
+                    await OrderAsync();
                     break;
 
                 case ('H'):
-                    OrderHistory();
+                    await OrderHistoryAsync();
                     break;
 
                 case ('Q'):
@@ -47,25 +47,25 @@ public class HomeMenu : IMenu
         }
     }
 
-    public void Start(Customer customer)
+    public async Task StartAsync(Customer customer)
     {
         _customer = customer;
-        Start();
+        await StartAsync();
     }
 
-    public void Start(Customer customer, StoreFront store)
+    public async Task StartAsync(Customer customer, StoreFront store)
     {
         _customer = customer;
         _store = store;
-        Start();
+        await StartAsync();
     }
 
-    public void Order()
+    public async Task OrderAsync()
     {
-        _store = HelperFunctions.SelectStore(_bl);
+        _store = await HelperFunctions.SelectStoreAsync(_http);
         if (_store != null)
         {
-            MenuFactory.GetMenu("store").Start(_customer, _store);
+            await MenuFactory.GetMenu("store").StartAsync(_customer, _store);
         }
         else
         {
@@ -75,9 +75,9 @@ public class HomeMenu : IMenu
         }
     }
 
-    public void OrderHistory()
+    public async Task OrderHistoryAsync()
     {
-        List<Order> orders = _bl.GetAllOrders(_customer);
+        List<Order> orders = await _http.GetAllOrdersAsync(_customer);
         if (orders != null)
         {
             _customer.Orders = orders;
