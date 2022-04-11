@@ -29,7 +29,7 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpPost("AddCustomer")]
-        public async Task<ActionResult> Post(Customer customer)
+        public async Task<ActionResult> PostAsync(Customer customer)
         {
             if (customer.UserName.Length > 0)
             {
@@ -40,9 +40,9 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpPut("UpdateCustomer")]
-        public void Put(Customer customer)
+        public async Task Put(Customer customer)
         {
-            _bl.UpdateCustomer(customer);
+            await _bl.UpdateCustomerAsync(customer);
         }
 
         [HttpGet("GetAllCustomers/{employee}")]
