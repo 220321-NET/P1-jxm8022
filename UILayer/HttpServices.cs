@@ -1,47 +1,56 @@
 using System.Net.Http;
 using System.Text.Json;
+using System.Text;
 
 namespace UILayer;
 
 public class HttpServices
 {
-    private readonly string _apiBaseURL = "https//localhost:7100/api";
+    private readonly string _apiBaseURL = "https://localhost:7100/api/";
     private readonly ILogger _logger;
+    private HttpClient client = new HttpClient();
 
     public HttpServices(ILogger logger)
     {
         _logger = logger;
+        client.BaseAddress = new Uri(_apiBaseURL);
     }
 
     public async Task AddCustomerAsync(Customer customer)
     {
-        string url = _apiBaseURL + "Customer";
-
         string jsonString = JsonSerializer.Serialize(customer);
-        HttpContent httpContent = new StringContent(jsonString);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-        HttpClient client = new HttpClient();
-        await client.PostAsync(url, httpContent);
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("Customer/AddCustomer", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
     }
 
     public async Task<Customer> GetCustomerAsync(string username)
     {
-        string url = _apiBaseURL + "Customer";
-
-        HttpClient client = new HttpClient();
+        Customer customer = new Customer();
         try
         {
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync($"Customer/{username}");
             response.EnsureSuccessStatusCode();
             string responseString = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<Customer>(responseString) ?? new Customer();
+            if (responseString != null && responseString.Length > 0)
+                customer = JsonSerializer.Deserialize<Customer>(responseString) ?? new Customer();
+            else
+                return null!;
         }
         catch (HttpRequestException ex)
         {
             _logger.Error(ex.Message);
         }
 
-        return new Customer();
+        return customer;
     }
 
     public async Task<List<Customer>> GetAllCustomersAsync(bool employee)
