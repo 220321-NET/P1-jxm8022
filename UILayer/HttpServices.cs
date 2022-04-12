@@ -168,7 +168,18 @@ public class HttpServices
 
     public async Task AddProducttoStoreAsync(StoreOrder storeOrder)
     {
+        string jsonString = JsonSerializer.Serialize(storeOrder);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("Product/AddProduct", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
     }
 
     /**********************************************************************************
