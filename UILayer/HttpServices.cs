@@ -16,6 +16,13 @@ public class HttpServices
         client.BaseAddress = new Uri(_apiBaseURL);
     }
 
+    /**********************************************************************************
+     * 
+     * 
+     *                      CUSTOMER HTTP REQUESTS
+     * 
+     * 
+    **********************************************************************************/
     public async Task AddCustomerAsync(Customer customer)
     {
         string jsonString = JsonSerializer.Serialize(customer);
@@ -91,9 +98,72 @@ public class HttpServices
         }
     }
 
+    /**********************************************************************************
+     * 
+     * 
+     *                      PRODUCT HTTP REQUESTS
+     * 
+     * 
+    **********************************************************************************/
+
     public async Task AddProductAsync(Product product)
     {
+        string jsonString = JsonSerializer.Serialize(product);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("Product/AddProduct", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        List<Product> products = new List<Product>();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync("Product/GetAllProducts");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                products = JsonSerializer.Deserialize<List<Product>>(responseString) ?? new List<Product>();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return products;
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync(StoreFront store)
+    {
+        List<Product> products = new List<Product>();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"Product/GetAllProductsFromStore/{store.StoreID}");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                products = JsonSerializer.Deserialize<List<Product>>(responseString) ?? new List<Product>();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return products;
     }
 
     public async Task AddProducttoStoreAsync(StoreOrder storeOrder)
@@ -101,24 +171,17 @@ public class HttpServices
 
     }
 
-    public async Task<List<Product>> GetAllProductsAsync()
-    {
-        return new List<Product>();
-    }
-
-    public async Task<List<Product>> GetAllProductsAsync(StoreFront store)
-    {
-        return new List<Product>();
-    }
+    /**********************************************************************************
+     * 
+     * 
+     *                      STORE HTTP REQUESTS
+     * 
+     * 
+    **********************************************************************************/
 
     public async Task<List<StoreFront>> GetStoreFrontsAsync()
     {
         return new List<StoreFront>();
-    }
-
-    public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
-    {
-        return new List<Order>();
     }
 
     public async Task<StoreFront> GetStoreAsync(string city)
@@ -129,6 +192,19 @@ public class HttpServices
     public async Task AddStoreAsync(StoreFront store)
     {
 
+    }
+
+    /**********************************************************************************
+     * 
+     * 
+     *                      ORDERS HTTP REQUESTS
+     * 
+     * 
+    **********************************************************************************/
+
+    public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
+    {
+        return new List<Order>();
     }
 
     public async Task AddOrderAsync(List<Product> cart, StoreFront store, Customer customer)
