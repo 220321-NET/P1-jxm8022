@@ -263,7 +263,7 @@ public class HttpServices
 
         try
         {
-            HttpResponseMessage response = await client.GetAsync($"Order/GetAllOrders");
+            HttpResponseMessage response = await client.GetAsync($"Order/GetAllOrders/{customer.CustomerID}");
             response.EnsureSuccessStatusCode();
             string responseString = await response.Content.ReadAsStringAsync();
             if (responseString != null && responseString.Length > 0)
