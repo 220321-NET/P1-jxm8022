@@ -96,7 +96,7 @@ public class HttpServices
 
     }
 
-    public async Task AddProductAsync(Product product, StoreFront store)
+    public async Task AddProducttoStoreAsync(StoreOrder storeOrder)
     {
 
     }

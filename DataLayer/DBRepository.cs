@@ -51,26 +51,26 @@ public class DBRepository : IRepository
         await DBProduct.AddProductAsync(product, _connectionString);
     }
 
-    public async Task AddProductAsync(Product product, StoreFront store)
+    public async Task AddProducttoStoreAsync(StoreOrder storeOrder)
     {
         // get productID
-        int amount = product.ProductQuantity;
-        product = await GetProductAsync(product.ProductName);
-        if (product != null)
+        int amount = storeOrder.Product.ProductQuantity;
+        storeOrder.Product = await GetProductAsync(storeOrder.Product.ProductName);
+        if (storeOrder.Product != null)
         {
-            product.ProductQuantity = amount;
-            if (await PreviousInventoryAsync(product.ProductID, store) != -1)
+            storeOrder.Product.ProductQuantity = amount;
+            if (await PreviousInventoryAsync(storeOrder.Product.ProductID, storeOrder.StoreFront) != -1)
             {
-                product.ProductQuantity += await PreviousInventoryAsync(product.ProductID, store);
-                if (await DBInventory.GetInventoryIDAsync(product, store, _connectionString) != -1)
+                storeOrder.Product.ProductQuantity += await PreviousInventoryAsync(storeOrder.Product.ProductID, storeOrder.StoreFront);
+                if (await DBInventory.GetInventoryIDAsync(storeOrder.Product, storeOrder.StoreFront, _connectionString) != -1)
                 {
-                    store.InventoryID = await DBInventory.GetInventoryIDAsync(product, store, _connectionString);
+                    storeOrder.StoreFront.InventoryID = await DBInventory.GetInventoryIDAsync(storeOrder.Product, storeOrder.StoreFront, _connectionString);
                 }
-                await UpdateInventoryAsync(product, store);
+                await UpdateInventoryAsync(storeOrder.Product, storeOrder.StoreFront);
             }
             else
             {
-                await AddInventoryAsync(product, store);
+                await AddInventoryAsync(storeOrder.Product, storeOrder.StoreFront);
             }
         }
         else

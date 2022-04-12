@@ -198,7 +198,7 @@ public class StoreMenu : IMenu
             switch (command)
             {
                 case ('A'):
-                    await AddProductAsync();
+                    await AddProducttoStoreAsync();
                     break;
 
                 case ('C'):
@@ -218,20 +218,22 @@ public class StoreMenu : IMenu
         }
     }
 
-    public async Task AddProductAsync()
+    public async Task AddProducttoStoreAsync()
     {
-        Product product = await HelperFunctions.SelectProductAsync(_http);
-        if (product != null)
+        StoreOrder storeOrder = new StoreOrder();
+        storeOrder.StoreFront = _store;
+        storeOrder.Product = await HelperFunctions.SelectProductAsync(_http);
+        if (storeOrder.Product != null)
         {
             Console.WriteLine("Amount to add:");
             int quantity = InputValidation.ValidInteger();
 
             if (quantity < 1000)
             {
-                product.ProductQuantity = quantity;
+                storeOrder.Product.ProductQuantity = quantity;
                 try
                 {
-                    await _http.AddProductAsync(product, _store);
+                    await _http.AddProducttoStoreAsync(storeOrder);
                 }
                 catch (SqlException ex)
                 {

@@ -9,7 +9,7 @@ public interface IRepository
     Task<StoreFront> GetStoreAsync(string city);
     Task<List<StoreFront>> GetStoreFrontsAsync();
     Task AddProductAsync(Product product);
-    Task AddProductAsync(Product product, StoreFront store);
+    Task AddProducttoStoreAsync(StoreOrder storeOrder);
     Task<Product> GetProductAsync(string name);
     Task<List<Product>> GetAllProductsAsync();
     Task<List<Product>> GetAllProductsAsync(StoreFront store);

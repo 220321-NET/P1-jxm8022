@@ -49,9 +49,9 @@ public class Business : IBusiness
         await _repo.AddProductAsync(product);
     }
 
-    public async Task AddProductAsync(Product product, StoreFront store)
+    public async Task AddProducttoStoreAsync(StoreOrder storeOrder)
     {
-        await _repo.AddProductAsync(product, store);
+        await _repo.AddProducttoStoreAsync(storeOrder);
     }
 
     public async Task<Product> GetProductAsync(string name)
