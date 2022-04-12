@@ -190,19 +190,63 @@ public class HttpServices
      * 
     **********************************************************************************/
 
-    public async Task<List<StoreFront>> GetStoreFrontsAsync()
-    {
-        return new List<StoreFront>();
-    }
-
     public async Task<StoreFront> GetStoreAsync(string city)
     {
-        return new StoreFront();
+        StoreFront store = new StoreFront();
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"Store/{city}");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                store = JsonSerializer.Deserialize<StoreFront>(responseString) ?? new StoreFront();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return store;
+    }
+
+    public async Task<List<StoreFront>> GetStoreFrontsAsync()
+    {
+        List<StoreFront> stores = new List<StoreFront>();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"Store/GetStoreFronts");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                stores = JsonSerializer.Deserialize<List<StoreFront>>(responseString) ?? new List<StoreFront>();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return stores;
     }
 
     public async Task AddStoreAsync(StoreFront store)
     {
+        string jsonString = JsonSerializer.Serialize(store);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("Store/AddStore", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
     }
 
     /**********************************************************************************
