@@ -17,8 +17,32 @@ namespace TelescopeStoreAPI.Controllers
             _bl = bl;
         }
 
-        [HttpPost("Product/AddProduct/{product}")]
-        public async Task<ActionResult> Post(Product product)
+        [HttpGet("GetAllProducts")]
+        public async Task<ActionResult<List<Product>>> GetAsync()
+        {
+            List<Product>? products = await _bl.GetAllProductsAsync();
+
+            if (products != null)
+                return Ok(products);
+            return NoContent();
+        }
+
+        [HttpGet("GetAllProductsFromStore/{storeID}")]
+        public async Task<ActionResult<List<Product>>> GetAsync(int storeID)
+        {
+            StoreFront store = new StoreFront
+            {
+                StoreID = storeID
+            };
+            List<Product>? products = await _bl.GetAllProductsAsync(store);
+
+            if (products != null)
+                return Ok(products);
+            return NoContent();
+        }
+
+        [HttpPost("AddProduct")]
+        public async Task<ActionResult> PostAsync(Product product)
         {
             if (product.ProductName.Length > 0)
             {
@@ -28,13 +52,14 @@ namespace TelescopeStoreAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("Product/GetAllProducts")]
-        public async Task<ActionResult<List<Product>>> Get()
+        [HttpPost("AddProductToStore")]
+        public async Task<ActionResult> PostAsync(StoreOrder storeOrder)
         {
-            List<Product>? products = await _bl.GetAllProductsAsync();
-
-            if (products != null)
-                return Ok(products);
+            if (storeOrder.Product.ProductName.Length > 0)
+            {
+                await _bl.AddProducttoStoreAsync(storeOrder);
+                return Ok();
+            }
             return NoContent();
         }
     }
