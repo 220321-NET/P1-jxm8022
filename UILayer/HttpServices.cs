@@ -259,11 +259,39 @@ public class HttpServices
 
     public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
     {
-        return new List<Order>();
+        List<Order> orders = new List<Order>();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"Order/GetAllOrders");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                orders = JsonSerializer.Deserialize<List<Order>>(responseString) ?? new List<Order>();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return orders;
     }
 
-    public async Task AddOrderAsync(List<Product> cart, StoreFront store, Customer customer)
+    public async Task AddOrderAsync(CustomerOrder customerOrder)
     {
+        string jsonString = JsonSerializer.Serialize(customerOrder);
+        StringContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("Order/AddCustomerOrder", httpContent);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
     }
 }
