@@ -14,6 +14,6 @@ public interface IBusiness
     Task<Product> GetProductAsync(string name);
     Task<List<Product>> GetAllProductsAsync();
     Task<List<Product>> GetAllProductsAsync(StoreFront store);
-    Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer);
+    Task AddOrderAsync(CustomerOrder customerOrder);
     Task<List<Order>> GetAllOrdersAsync(Customer customer);
 }

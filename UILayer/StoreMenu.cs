@@ -152,9 +152,16 @@ public class StoreMenu : IMenu
 
     public async Task<bool> PurchaseCartAsync()
     {
+        CustomerOrder customerOrder = new CustomerOrder
+        {
+            Cart = _customer.Cart,
+            Store = _store,
+            Customer = _customer
+        };
+
         try
         {
-            await _http.AddOrderAsync(_customer.Cart, _store, _customer);
+            await _http.AddOrderAsync(customerOrder);
             return true;
         }
         catch (SqlException ex)

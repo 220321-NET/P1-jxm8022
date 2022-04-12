@@ -69,9 +69,9 @@ public class Business : IBusiness
         return await _repo.GetAllProductsAsync(store);
     }
 
-    public async Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer)
+    public async Task AddOrderAsync(CustomerOrder customerOrder)
     {
-        await _repo.AddOrderAsync(products, store, customer);
+        await _repo.AddOrderAsync(customerOrder);
     }
 
     public async Task<List<Order>> GetAllOrdersAsync(Customer customer)
