@@ -28,6 +28,18 @@ namespace TelescopeStoreAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet("GetAllCustomers/{employee}")]
+        public async Task<ActionResult<List<Customer>>> GetAsync(bool employee)
+        {
+            List<Customer>? customers = await _bl.GetAllCustomersAsync(employee);
+
+            if (customers != null)
+            {
+                return Ok(customers);
+            }
+            return NoContent();
+        }
+
         [HttpPost("AddCustomer")]
         public async Task<ActionResult> PostAsync(Customer customer)
         {
@@ -43,18 +55,6 @@ namespace TelescopeStoreAPI.Controllers
         public async Task Put(Customer customer)
         {
             await _bl.UpdateCustomerAsync(customer);
-        }
-
-        [HttpGet("GetAllCustomers/{employee}")]
-        public async Task<ActionResult<List<Customer>>> GetAsync(bool employee)
-        {
-            List<Customer>? customers = await _bl.GetAllCustomersAsync(employee);
-
-            if (customers != null)
-            {
-                return Ok(customers);
-            }
-            return NoContent();
         }
     }
 }
