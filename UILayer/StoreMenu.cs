@@ -154,7 +154,6 @@ public class StoreMenu : IMenu
     {
         CustomerOrder customerOrder = new CustomerOrder
         {
-            Cart = _customer.Cart,
             Store = _store,
             Customer = _customer
         };

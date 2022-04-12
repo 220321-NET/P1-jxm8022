@@ -111,7 +111,7 @@ public class DBRepository : IRepository
 
     public async Task AddOrderAsync(CustomerOrder customerOrder)
     {
-        await DBOrder.AddOrderAsync(customerOrder.Cart, customerOrder.Store, customerOrder.Customer, _connectionString);
+        await DBOrder.AddOrderAsync(customerOrder.Store, customerOrder.Customer, _connectionString);
     }
 
     public async Task<List<Order>> GetAllOrdersAsync(Customer customer)

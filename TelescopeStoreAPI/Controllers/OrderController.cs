@@ -17,9 +17,13 @@ namespace TelescopeStoreAPI.Controllers
             _bl = bl;
         }
 
-        [HttpGet("GetAllOrders")]
-        public async Task<ActionResult<List<Order>>> GetAsync(Customer customer)
+        [HttpGet("GetAllOrders/{customerID}")]
+        public async Task<ActionResult<List<Order>>> GetAsync(int customerID)
         {
+            Customer customer = new Customer
+            {
+                CustomerID = customerID
+            };
             List<Order>? orders = await _bl.GetAllOrdersAsync(customer);
 
             if (orders != null)
@@ -30,11 +34,11 @@ namespace TelescopeStoreAPI.Controllers
         }
 
         [HttpPost("AddCustomerOrder")]
-        public async Task<ActionResult> PostAsync(StoreOrder storeOrder)
+        public async Task<ActionResult> PostAsync(CustomerOrder customerOrder)
         {
-            if (storeOrder.Product.ProductName.Length > 0)
+            if (customerOrder.Customer.Cart.Count > 0)
             {
-                await _bl.AddProducttoStoreAsync(storeOrder);
+                await _bl.AddOrderAsync(customerOrder);
                 return Ok();
             }
             return NoContent();

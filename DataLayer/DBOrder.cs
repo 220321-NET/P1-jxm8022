@@ -5,7 +5,7 @@ namespace DataLayer;
 
 public static class DBOrder
 {
-    public static async Task AddOrderAsync(List<Product> products, StoreFront store, Customer customer, string _connectionString)
+    public static async Task AddOrderAsync(StoreFront store, Customer customer, string _connectionString)
     {
         await Task.Factory.StartNew(() =>
         {
@@ -26,7 +26,7 @@ public static class DBOrder
             DataTable? orderTable = orderSet.Tables["OrderTable"];
             if (orderTable != null)
             {
-                foreach (Product product in products)
+                foreach (Product product in customer.Cart)
                 {
                     DataRow newRow = orderTable.NewRow();
                     newRow["ProductID"] = product.ProductID;
@@ -47,7 +47,7 @@ public static class DBOrder
             }
         });
 
-        foreach (Product product in products)
+        foreach (Product product in customer.Cart)
         {
             store.InventoryID = await DBInventory.GetInventoryIDAsync(product, store, _connectionString);
             product.ProductQuantity = store.Inventory.Find(x => x.ProductName == product.ProductName)!.ProductQuantity;
