@@ -55,7 +55,24 @@ public class HttpServices
 
     public async Task<List<Customer>> GetAllCustomersAsync(bool employee)
     {
-        return new List<Customer>();
+        List<Customer> customers = new List<Customer>();
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"Customer/GetAllCustomers/{employee}");
+            response.EnsureSuccessStatusCode();
+            string responseString = await response.Content.ReadAsStringAsync();
+            if (responseString != null && responseString.Length > 0)
+                customers = JsonSerializer.Deserialize<List<Customer>>(responseString) ?? new List<Customer>();
+            else
+                return null!;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.Error(ex.Message);
+        }
+
+        return customers;
     }
 
     public async Task UpdateCustomerAsync(Customer customer)
