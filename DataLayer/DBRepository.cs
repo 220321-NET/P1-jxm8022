@@ -130,12 +130,6 @@ public class DBRepository : IRepository
             }
             return orders;
         }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Customer has no orders!");
-            Console.ForegroundColor = ConsoleColor.Gray;
-        }
         return null!;
     }
 }

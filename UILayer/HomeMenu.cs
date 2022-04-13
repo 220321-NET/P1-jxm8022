@@ -92,5 +92,11 @@ public class HomeMenu : IMenu
             Console.WriteLine("=====================================================================");
             Console.WriteLine("=====================================================================");
         }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Customer has no orders!");
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
     }
 }
