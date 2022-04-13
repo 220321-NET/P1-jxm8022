@@ -195,7 +195,7 @@ public class HttpServices
         StoreFront store = new StoreFront();
         try
         {
-            HttpResponseMessage response = await client.GetAsync($"Store/{city}");
+            HttpResponseMessage response = await client.GetAsync($"Store/GetStore/{city}");
             response.EnsureSuccessStatusCode();
             string responseString = await response.Content.ReadAsStringAsync();
             if (responseString != null && responseString.Length > 0)
