@@ -229,6 +229,7 @@ public class StoreMenu : IMenu
         StoreOrder storeOrder = new StoreOrder();
         storeOrder.StoreFront = _store;
         storeOrder.Product = await HelperFunctions.SelectProductAsync(_http);
+        storeOrder.StoreFront.Inventory = new List<Product>();
         if (storeOrder.Product != null)
         {
             Console.WriteLine("Amount to add:");
