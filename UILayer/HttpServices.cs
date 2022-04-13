@@ -173,7 +173,7 @@ public class HttpServices
 
         try
         {
-            HttpResponseMessage response = await client.PostAsync("Product/AddProduct", httpContent);
+            HttpResponseMessage response = await client.PostAsync("Product/AddProductToStore", httpContent);
             response.EnsureSuccessStatusCode();
         }
         catch (HttpRequestException ex)
