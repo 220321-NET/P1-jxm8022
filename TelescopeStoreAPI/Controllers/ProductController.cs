@@ -55,7 +55,7 @@ namespace TelescopeStoreAPI.Controllers
         [HttpPost("AddProductToStore")]
         public async Task<ActionResult> PostAsync(StoreOrder storeOrder)
         {
-            if (storeOrder.Product.ProductName.Length > 0)
+            if (storeOrder.Product.ProductName.Length > 0 && storeOrder.StoreFront.StoreID != -1)
             {
                 await _bl.AddProducttoStoreAsync(storeOrder);
                 return Ok();
