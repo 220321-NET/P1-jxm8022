@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="../ModelLayer/ModelLayer.csproj" />
+    <ProjectReference Include="../../FrontEnd/ModelLayer/ModelLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
