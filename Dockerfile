@@ -7,13 +7,13 @@ WORKDIR /telescopeApp
 # copy source code over
 COPY . .
 
-RUN dotnet clean P1-jxm8022.sln
-RUN dotnet public TelescopeStoreAPI --configuration Release -o ./publish
+RUN dotnet clean ./BackEnd/P1-jxm8022.sln
+RUN dotnet publish ./BackEnd/TelescopeStoreAPI --configuration Release -o ./BackEnd/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS run
 
 WORKDIR /telescopeApp
 
-COPY --from=build /app/publish .
+COPY --from=build /telescopeApp/BackEnd/publish .
 
 CMD ["dotnet", "TelescopeStoreAPI.dll"]
