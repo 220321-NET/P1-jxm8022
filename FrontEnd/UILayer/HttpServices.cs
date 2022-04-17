@@ -6,7 +6,8 @@ namespace UILayer;
 
 public class HttpServices
 {
-    private readonly string _apiBaseURL = "https://localhost:7100/api/";
+    // private readonly string _apiBaseURL = "https://localhost:7100/api/";
+    private readonly string _apiBaseURL = "https://telescopestoreapi.azurewebsites.net/api/";
     private readonly ILogger _logger;
     private HttpClient client = new HttpClient();
 
