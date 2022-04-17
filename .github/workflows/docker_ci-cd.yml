@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+  
+permissions:
+  pull-requests: read
 
 jobs:
 
@@ -59,9 +62,8 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   build:
-
     runs-on: ubuntu-latest
-
+    needs: analysis
     steps:
     - uses: actions/checkout@v3
     
