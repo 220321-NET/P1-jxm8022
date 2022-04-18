@@ -204,4 +204,129 @@ public class BusinessTests
 
         mock.Verify(dl => dl.GetStoreAsync(testCity), Times.Once());
     }
+
+    [Fact]
+    public async Task GetStoreFronts()
+    {
+        var mock = new Mock<IRepository>();
+
+        List<StoreFront> fakeStores = new List<StoreFront>
+        {
+            new StoreFront
+            {
+                City = "testCity1",
+                StoreID = 1,
+                State = "TS"
+            },
+            new StoreFront
+            {
+                City = "testCity2",
+                StoreID = 2,
+                State = "TE"
+            },
+            new StoreFront
+            {
+                City = "testCity3",
+                StoreID = 3,
+                State = "TT"
+            }
+        };
+
+        mock.Setup(dl => dl.GetStoreFrontsAsync()).ReturnsAsync(fakeStores);
+
+        Business bl = new Business(mock.Object);
+
+        List<StoreFront> stores = await bl.GetStoreFrontsAsync();
+
+        Assert.NotNull(stores);
+        Assert.Equal(3, stores.Count);
+        Assert.Equal(fakeStores, stores);
+
+        mock.Verify(dl => dl.GetStoreFrontsAsync(), Times.Once());
+    }
+
+    /**********************************************************************************
+     * 
+     * 
+     *                                 PRODUCT TESTS
+     * 
+     * 
+    **********************************************************************************/
+
+    [Fact]
+    public async Task AddProductTest()
+    {
+        var mock = new Mock<IRepository>();
+
+        Product testProduct = new Product
+        {
+            ProductName = "testName",
+            ProductPrice = 0.99M,
+            ProductQuantity = 4
+        };
+
+        Product expectedProduct = new Product
+        {
+            ProductID = 0,
+            ProductName = "testName",
+            ProductPrice = 0.99M,
+            ProductQuantity = 4
+        };
+
+        mock.Setup(dl => dl.AddProductAsync(testProduct));
+
+        Business bl = new Business(mock.Object);
+
+        await bl.AddProductAsync(testProduct);
+
+        Assert.Equal(expectedProduct.ProductID, testProduct.ProductID);
+        Assert.Equal(expectedProduct.ProductName, testProduct.ProductName);
+        Assert.Equal(expectedProduct.ProductPrice, testProduct.ProductPrice);
+        Assert.Equal(expectedProduct.ProductQuantity, testProduct.ProductQuantity);
+
+        mock.Verify(dl => dl.AddProductAsync(testProduct), Times.Once());
+    }
+
+    [Fact]
+    public async Task GetAllProducts()
+    {
+        var mock = new Mock<IRepository>();
+
+        List<Product> fakeProduct = new List<Product>
+        {
+            new Product
+            {
+                ProductName = "testName1",
+                ProductID = 1,
+                ProductPrice = 0.99M,
+                ProductQuantity = 1
+            },
+            new Product
+            {
+                ProductName = "testName2",
+                ProductID = 2,
+                ProductPrice = 0.99M,
+                ProductQuantity = 2
+            },
+            new Product
+            {
+                ProductName = "testName3",
+                ProductID = 3,
+                ProductPrice = 0.99M,
+                ProductQuantity = 3
+            }
+        };
+
+        mock.Setup(dl => dl.GetAllProductsAsync()).ReturnsAsync(fakeProduct);
+
+        Business bl = new Business(mock.Object);
+
+        List<Product> products = await bl.GetAllProductsAsync();
+
+        Assert.NotNull(products);
+        Assert.Equal(3, products.Count);
+        Assert.Equal(fakeProduct, products);
+
+        mock.Verify(dl => dl.GetAllProductsAsync(), Times.Once());
+    }
 }
