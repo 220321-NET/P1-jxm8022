@@ -18,9 +18,43 @@ public class OrderTests
     }
 
     [Fact]
-    public void OrderToString()
+    public void OrderToStringNoProducts()
     {
         Order order = new Order();
+
+        string expectedString = $"City: \t\t{order.StoreName}\nTransactionID: \t{order.TransactionID}\n";
+        foreach (Product product in order.Products)
+        {
+            expectedString += "\t" + product.ToString() + "\n";
+        }
+        expectedString += $"\tTotal: {order.OrderTotal}\n";
+
+        Assert.Equal(expectedString, order.ToString());
+    }
+
+    [Fact]
+    public void OrderToStringProducts()
+    {
+        Order order = new Order
+        {
+            Products = {
+                new Product{
+                    ProductName = "testName1",
+                    ProductQuantity = 1,
+                    ProductPrice = 1.00M
+                },
+                new Product{
+                    ProductName = "testName2",
+                    ProductQuantity = 2,
+                    ProductPrice = 1.00M
+                },
+                new Product{
+                    ProductName = "testName3",
+                    ProductQuantity = 3,
+                    ProductPrice = 1.00M
+                },
+            }
+        };
 
         string expectedString = $"City: \t\t{order.StoreName}\nTransactionID: \t{order.TransactionID}\n";
         foreach (Product product in order.Products)
